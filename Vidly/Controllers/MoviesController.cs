@@ -13,12 +13,16 @@ namespace Vidly.Controllers
         // GET: Movie
         public ActionResult Index()
         {
-            var movies = new List<Movie>
-            {
-                new Movie{Id = 1, Name = "Les Miserables"},
-                new Movie{Id = 2, Name = "Monty Python"}
-            };
+            var movies = GetAllMovies();
+
             return View(movies);
+        }
+
+        [Route("movies/detail/{id:min(0)}")]
+        public ActionResult Detail(int id)
+        {
+            Movie movie = GetMovieById(id);
+            return View(movie);
         }
 
         //[Route("movies/released/{year:regex(\\d{4):min(1900)}/{month:regex(\\d{2})}")]
@@ -45,5 +49,29 @@ namespace Vidly.Controllers
 
             return View(viewModel);
         }
+
+        #region Helper Methods
+        public List<Movie> GetAllMovies()
+        {
+            var movies = new List<Movie>
+            {
+                new Movie{Id = 1, Name = "Les Miserables"},
+                new Movie{Id = 2, Name = "Monty Python"}
+            };
+
+            return movies;
+        }
+
+        public Movie GetMovieById(int id)
+        {
+            var movies = new List<Movie>
+            {
+                new Movie{Id = 1, Name = "Les Miserables"},
+                new Movie{Id = 2, Name = "Monty Python"}
+            };
+
+            return movies.First(x => x.Id == id);
+        }
+        #endregion
     }
 }
