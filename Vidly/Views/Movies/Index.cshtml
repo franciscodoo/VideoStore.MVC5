@@ -15,7 +15,8 @@ else
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Movie Name</th>
+                <th>Name</th>
+                <th>Genre</th>
             </tr>
         </thead>
         <tbody>
@@ -23,6 +24,7 @@ else
             {
                 <tr>
                     <td>@Html.ActionLink(@movie.Name, "Detail", "Movies", new {Id = movie.Id}, null)</td> @* null forces compiler to use inline object as the route parameters*@
+                    <td>@movie.Genre.Description</td>
                 </tr>
             }
         </tbody>

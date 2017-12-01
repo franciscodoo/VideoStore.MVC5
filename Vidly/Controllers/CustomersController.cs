@@ -10,6 +10,7 @@ namespace Vidly.Controllers
 {
     public class CustomersController : Controller
     {
+
         //We need DbContext to access db. private by convention
         private ApplicationDbContext _context;
 
@@ -31,8 +32,6 @@ namespace Vidly.Controllers
             //Include: eager loading. allow customer related objects to be sent to the view
             //with _context.Customers.ToList() executes immediatly
             List<Customer> customers = _context.Customers.Include(x => x.MembershipType).ToList(); //otherwise ~ defered execution. only when the obj is iterated.
-            if (customers == null) 
-                return HttpNotFound();
 
             return View(customers);
         }
@@ -41,6 +40,9 @@ namespace Vidly.Controllers
         public ActionResult Detail(int id)
         {
             var customers = _context.Customers.SingleOrDefault(x => x.Id == id); //executes immediatly ~ SingleOrDefault
+            if (customers == null)
+                return HttpNotFound();
+
             return View(customers);
         }
 

@@ -9,3 +9,8 @@
 <text>Customer ID: @Model.Id</text>
 <br />
 <text>Customer Name: @Model.Name</text>
+
+@if(Model.Birthdate != null)
+{
+    <br /><text>Birthdate: @Model.Birthdate.Value.ToLongDateString()</text>
+}

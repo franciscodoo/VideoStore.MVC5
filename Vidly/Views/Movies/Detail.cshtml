@@ -4,9 +4,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Detail</h2>
+<h2>@Model.Name</h2>
 
-<text>Movie ID: @Model.Id</text>
-<br />
-<text>Movie Name: @Model.Name</text>
-
+<ul>
+    <li>Genre: @Model.Genre.Description</li>
+    <li>Release Date: @Model.ReleaseDate.ToLongDateString()</li>
+    <li>Date Added: @Model.DateAdded</li>
+    <li>In Stock: @Model.NumberInStock</li>
+</ul>
