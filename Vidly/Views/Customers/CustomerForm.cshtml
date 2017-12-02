@@ -1,0 +1,42 @@
+﻿@model Vidly.ViewModels.CustomerFormViewModel
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>New Customer</h2>
+
+@*Using: disposes and closes tag*@
+@* Target action: Save*@
+@using (@Html.BeginForm("Save","Customers")) 
+{
+    <div class="form-group">
+        @Html.LabelFor(x => x.Customer.Name)
+        @Html.TextBoxFor(x => x.Customer.Name, new { @class = "form-control" }) @*props will be based in Customer.cs props*@
+    </div>
+    <div class="form-group">
+        @*<label for="Birthdate">Date of Birth:</label> would maintain focus while changing the default name but if the name of prop is changed - error*@
+        @*Alternatively attribute [Display(Name = "...")] can be added on Customer.cs attribute - con: code must be compiled when changed *@
+
+        @Html.LabelFor(x => x.Customer.Birthdate)
+        @Html.TextBoxFor(x => x.Customer.Birthdate,"{0:d MMM yyyy}" ,new { @class = "form-control" }) 
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.Customer.MembershipTypeId)
+        @Html.DropDownListFor(
+            x => x.Customer.MembershipTypeId,
+            new SelectList(
+                Model.MembershipTypes, @*List of Items*@
+                "Id",  @*Property that holds the value for each item*@
+                "Name"), @*Property that holds the text for each item*@
+            "Select Membership Type", @*Default option*@
+            new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.CheckBoxFor(x => x.Customer.IsSubscribedToNewsletter) Subscribed to Newsletter? 
+    </div>
+    
+    @Html.HiddenFor(x => x.Customer.Id)
+    <button type ="submit" class="btn btn-primary">Save</button> 
+    
+}

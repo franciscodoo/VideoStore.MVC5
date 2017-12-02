@@ -11,7 +11,8 @@ namespace Vidly.Controllers
 {
     public class MoviesController : Controller
     {
-                //We need DbContext to access db. private by convention
+        #region DbContext
+        //We need DbContext to access db. private by convention
         private ApplicationDbContext _context;
 
         public MoviesController()
@@ -24,6 +25,53 @@ namespace Vidly.Controllers
         {
             //ApplicationDbContext this is a disposable object. override Dispose from the base Controller class
             _context.Dispose();
+        }
+        #endregion
+
+        public ActionResult New()
+        {
+            List<Genre> genres = _context.Genres.ToList();
+            MovieFormViewModel viewModel = new MovieFormViewModel()
+            {
+                Action = "Create",
+                Genres = genres
+            };
+            return View("MovieForm", viewModel);
+        }
+
+        public ActionResult Edit(int id)
+        {
+            Movie movie = _context.Movies.First(x => x.Id == id);
+            MovieFormViewModel viewModel = new MovieFormViewModel()
+            {
+                Action = "Edit",
+                Genres = _context.Genres.ToList(),
+                Movie = movie
+            };
+
+
+            return View("MovieForm", viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Save(Movie movie)
+        {
+            if (movie.Id == 0) //new Movie
+            {
+                movie.DateAdded = DateTime.Now;
+                _context.Movies.Add(movie);
+            }
+            else //existing movie
+            {
+                var movieInDb = _context.Movies.First(x => x.Id == movie.Id);
+
+                movieInDb.Name = movie.Name;
+                movieInDb.ReleaseDate = movie.ReleaseDate;
+                movieInDb.Genre = movie.Genre;
+                movieInDb.NumberInStock = movie.NumberInStock;
+            }
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Movies");
         }
 
         public ActionResult Index()

@@ -5,12 +5,14 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Vidly.Models;
+using Vidly.ViewModels;
 
 namespace Vidly.Controllers
 {
     public class CustomersController : Controller
     {
 
+        #region ApplicationDbContext
         //We need DbContext to access db. private by convention
         private ApplicationDbContext _context;
 
@@ -25,7 +27,43 @@ namespace Vidly.Controllers
             //ApplicationDbContext this is a disposable object. override Dispose from the base Controller class
             _context.Dispose();
         }
+        #endregion
 
+
+        public ActionResult New()
+        {
+            var membershipTypes = _context.MembershipTypes.ToList();
+            var viewModel = new CustomerFormViewModel()
+            {
+                MembershipTypes = membershipTypes
+            };
+
+            return View("CustomerForm",viewModel);
+        }
+
+        [HttpPost]
+        //public ActionResult Save(CustomerFormViewModel viewModel) //Model Binding: mvc framework automat. maps request data to this obj
+        public ActionResult Save(Customer customer) //mvc framwrk can map the req data (CustomerFormViewModel) to Customer (all objs are prefixed with customer.) 
+        {
+            if (customer.Id == 0) //new customer - create
+            {
+                _context.Customers.Add(customer);
+            }
+            else //existing customer - update
+            {
+                var customerInDb = _context.Customers.Single(x => x.Id == customer.Id);
+
+                //TryUpdateModel(...) may lead to security issues
+
+                customerInDb.Name = customer.Name;
+                customerInDb.Birthdate = customer.Birthdate;
+                customerInDb.MembershipTypeId = customer.MembershipTypeId;
+                customerInDb.IsSubscribedToNewsletter = customer.IsSubscribedToNewsletter;
+            }
+            
+            _context.SaveChanges(); //atomic
+            return RedirectToAction("Index", "Customers");
+        }
 
         public ActionResult Index()
         {
@@ -44,6 +82,20 @@ namespace Vidly.Controllers
                 return HttpNotFound();
 
             return View(customers);
+        }
+
+        public ActionResult Edit(int id)
+        {
+            Customer customer = _context.Customers.SingleOrDefault(x => x.Id == id);
+            if (customer == null) return HttpNotFound();
+
+            var viewModel = new CustomerFormViewModel
+            {
+                Customer = customer,
+                MembershipTypes = _context.MembershipTypes.ToList()
+            };
+
+            return View("CustomerForm", viewModel); //without "New" MVC will look for a view called "Edit"
         }
 
         //// GET: Customers
@@ -78,6 +130,5 @@ namespace Vidly.Controllers
         //        new Customer{Id = 1, Name = "Sancho Paulo"}
         //    }.First(x => x.Id == id);
         //}
-
     }
 }

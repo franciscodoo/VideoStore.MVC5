@@ -23,7 +23,7 @@ else
             @foreach (var customer in Model)
             {
                 <tr>
-                    <td>@Html.ActionLink(@customer.Name, "Detail", "Customers", new { Id = customer.Id }, null)</td> @* null forces compiler to use inline object as the route parameters*@
+                    <td>@Html.ActionLink(@customer.Name, "Edit", "Customers", new { Id = customer.Id }, null)</td> @* null forces compiler to use inline object as the route parameters*@
                     @*accessing MembershipType through customer obj. This generates error because by default Entity Framework only loads customer objects, not related objs, so MembershipType is null.
                       Must load them together - Eager Loading  *@
                     <td>@customer.MembershipType.Name</td>

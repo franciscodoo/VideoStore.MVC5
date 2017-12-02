@@ -6,6 +6,9 @@
 
 <h2>Movies</h2>
 
+@Html.ActionLink("New Movie", "New", "Movies", new { @class = "btn btn-primary" })
+<br/><br />
+
 @if(Model.Count == 0)
 {
     <text>No movies available</text>
@@ -23,7 +26,7 @@ else
             @foreach (var movie in Model)
             {
                 <tr>
-                    <td>@Html.ActionLink(@movie.Name, "Detail", "Movies", new {Id = movie.Id}, null)</td> @* null forces compiler to use inline object as the route parameters*@
+                    <td>@Html.ActionLink(@movie.Name, "Edit", "Movies", new {Id = movie.Id}, null)</td> @* null forces compiler to use inline object as the route parameters*@
                     <td>@movie.Genre.Description</td>
                 </tr>
             }
