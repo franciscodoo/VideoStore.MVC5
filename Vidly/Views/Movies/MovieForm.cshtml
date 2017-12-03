@@ -9,27 +9,42 @@
 @using (@Html.BeginForm("Save","Movies"))
 {
     <div class="form-group">
-        @Html.LabelFor(x => x.Movie.Name)
-        @Html.TextBoxFor(x => x.Movie.Name, new { @class = "form-control" }) @*props will be based in Customer.cs props*@
+        @Html.LabelFor(x => x.Name)
+        @Html.TextBoxFor(x => x.Name, new { @class = "form-control" }) @*props will be based in Customer.cs props*@
+        @Html.ValidationMessageFor(x => x.Name)
     </div>
     <div class="form-group">
-        @Html.LabelFor(x => x.Movie.ReleaseDate)
-        @Html.TextBoxFor(x => x.Movie.ReleaseDate, new { @class = "form-control" })
+        @Html.LabelFor(x => x.ReleaseDate)
+        @Html.TextBoxFor(x => x.ReleaseDate, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.ReleaseDate)
     </div>
     <div class="form-group">
-        @Html.LabelFor(x => x.Movie.GenreId)
+        @Html.LabelFor(x => x.GenreId)
         @Html.DropDownListFor(
-            x => x.Movie.GenreId,
+            x => x.GenreId,
             new SelectList(Model.Genres,"Id","Description"),
             "Select Genre",
             new { @class = "form-control"})
+        @Html.ValidationMessageFor(x => x.GenreId)
     </div>
     <div class="form-group">
-        @Html.LabelFor(x => x.Movie.NumberInStock)
-        @Html.TextBoxFor(x => x.Movie.NumberInStock, new { @type = "number", @class = "form-control", @min = "0" })
+        @Html.LabelFor(x => x.NumberInStock)
+        @Html.TextBoxFor(x => x.NumberInStock, new { @type = "number", @class = "form-control"})
+        @Html.ValidationMessageFor(x => x.NumberInStock)
     </div>
     
-    @Html.HiddenFor(x => x.Movie.Id)
+    @Html.HiddenFor(x => x.Id)
+    @Html.AntiForgeryToken(); //AntiForgeryToken to avoid CSRF Attacks
     <button type ="submit" class="btn btn-primary">Save</button> 
 }
+
+@section scripts
+{
+    @*client-side validation*@
+    @*NOTE: Custom Validation Attributes does NOT have client-side support*@
+    @*To check if server-side validation is on/off: view network tab on browser's dev tools*@
+
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
 

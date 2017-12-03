@@ -210,12 +210,17 @@
     <Compile Include="Migrations\201711302316108_PopulateMovies.Designer.cs">
       <DependentUpon>201711302316108_PopulateMovies.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201712031536437_RequiredNameMovieAttribute.cs" />
+    <Compile Include="Migrations\201712031536437_RequiredNameMovieAttribute.Designer.cs">
+      <DependentUpon>201712031536437_RequiredNameMovieAttribute.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\Genre.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MembershipRequiresLegalAge.cs" />
     <Compile Include="Models\MembershipType.cs" />
     <Compile Include="Models\Movie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -333,6 +338,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711302316108_PopulateMovies.resx">
       <DependentUpon>201711302316108_PopulateMovies.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712031536437_RequiredNameMovieAttribute.resx">
+      <DependentUpon>201712031536437_RequiredNameMovieAttribute.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

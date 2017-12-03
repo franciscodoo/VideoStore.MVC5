@@ -10,11 +10,12 @@ namespace Vidly.Models
     {
         public int Id { get; set; }
         
-        [Required]
+        [Required(ErrorMessage = "A wild custom error message appears!")]
         [StringLength(255)]
         public string Name { get; set; }
         
         [Display(Name = "Date of Birth")]
+        [MembershipRequiresLegalAge]
         public DateTime? Birthdate { get; set; }
         
         public bool IsSubscribedToNewsletter { get; set; }

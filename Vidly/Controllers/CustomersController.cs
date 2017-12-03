@@ -35,16 +35,36 @@ namespace Vidly.Controllers
             var membershipTypes = _context.MembershipTypes.ToList();
             var viewModel = new CustomerFormViewModel()
             {
+                Customer = new Customer(),
                 MembershipTypes = membershipTypes
             };
 
             return View("CustomerForm",viewModel);
         }
 
-        [HttpPost]
+        
         //public ActionResult Save(CustomerFormViewModel viewModel) //Model Binding: mvc framework automat. maps request data to this obj
+        [HttpPost]
+        [ValidateAntiForgeryToken] //++ Helper method on View 
         public ActionResult Save(Customer customer) //mvc framwrk can map the req data (CustomerFormViewModel) to Customer (all objs are prefixed with customer.) 
         {
+            //ModelState grants access to validation data
+            if (!ModelState.IsValid) //Check if model is valid
+            {
+                //To add validation - 3 steps:
+                //1. Add Data Annotations ~ attributes ~ to model props
+                //2. Use ModelState to change flow of the program when needed
+                //3. Add validation messages (view)
+
+                var viewModel = new CustomerFormViewModel()
+                {
+                    Customer = customer,
+                    MembershipTypes = _context.MembershipTypes.ToList()
+                };
+
+                return View("CustomerForm" , viewModel);
+            }
+
             if (customer.Id == 0) //new customer - create
             {
                 _context.Customers.Add(customer);
