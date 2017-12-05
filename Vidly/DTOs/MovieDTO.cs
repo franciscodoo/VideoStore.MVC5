@@ -8,6 +8,8 @@ namespace Vidly.DTOs
 {
     public class MovieDTO
     {
+        public int Id { get; set; }
+
         [Required]
         public string Name { get; set; }
 

@@ -14,10 +14,10 @@ namespace Vidly.App_Start
         {
             //Customers
             CreateMap<Customer, CustomerDTO>();
-            CreateMap<CustomerDTO, Customer>();
+            CreateMap<CustomerDTO, Customer>().ForMember(c => c.Id, opt => opt.Ignore());
             //Movies
             CreateMap<Movie, MovieDTO>();
-            CreateMap<MovieDTO, Movie>();
+            CreateMap<MovieDTO, Movie>().ForMember(c => c.Id, opt => opt.Ignore());
         }
     }
 }
