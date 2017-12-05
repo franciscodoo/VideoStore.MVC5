@@ -10,16 +10,17 @@ using Vidly.Models;
 
 namespace Vidly.Controllers.Api
 {
-    #region ApplicationDbContext
+    
     public class CustomersController : ApiController
     {
+        #region ApplicationDbContext
         private ApplicationDbContext _context;
 
         public CustomersController()
         {
             _context = new ApplicationDbContext();
         }
-    #endregion
+        #endregion
 
         //In APIs we should not use domain objects (e.g. Customer) because it introduces security vulnerabilities
         //and it reduces the chances of our API breaking if we change our domain model.
@@ -28,27 +29,28 @@ namespace Vidly.Controllers.Api
         // GET /api/customers
         public IEnumerable<CustomerDTO> GetCustomers()
         {
-            return _context.Customers.ToList().Select(Mapper.Map<Customer,CustomerDTO>); //without () calling method - because we want deferred exec
+            return _context.Customers.ToList().Select(Mapper.Map<Customer, CustomerDTO>); //Map<...> without () in the end - because we want deferred exec
         }
 
         // GET /api/customers/1
-        public CustomerDTO GetCustomer(int id)
+        public IHttpActionResult GetCustomer(int id)
         {
             var customer = _context.Customers.SingleOrDefault(x => x.Id == id);
 
             if (customer == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
 
-            return Mapper.Map<Customer, CustomerDTO>(customer);
+            return Ok(Mapper.Map<Customer, CustomerDTO>(customer));
             //return customer;
         }
 
         // POST /api/customers
         [HttpPost] //only responds to POST requests
-        public CustomerDTO CreateCustomer(CustomerDTO customerDTO)
+        //IHttpActionResult similar to actionResult in MVC. 
+        public IHttpActionResult CreateCustomer(CustomerDTO customerDTO)
         {
-            if(!ModelState.IsValid)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            if (!ModelState.IsValid)
+                return BadRequest();
 
             var customer = Mapper.Map<CustomerDTO, Customer>(customerDTO);
 
@@ -57,7 +59,7 @@ namespace Vidly.Controllers.Api
 
             customerDTO.Id = customer.Id;
 
-            return customerDTO;
+            return Created(new Uri(Request.RequestUri + "/" + customer.Id), customerDTO);
         }
 
         // PUT /api/customers/1
