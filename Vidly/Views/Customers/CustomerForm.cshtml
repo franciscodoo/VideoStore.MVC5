@@ -47,11 +47,12 @@
     
 }
 
+@*
 @section scripts
 {
     @*client-side validation*@
     @*NOTE: Custom Validation Attributes does NOT have client-side support*@
     @*To check if server-side validation is on/off: view network tab on browser's dev tools*@
 
-    @Scripts.Render("~/bundles/jqueryval")   
-}
+    @* @Scripts.Render("~/bundles/jqueryval") -- custom attributes cannot be validated client-side } *@
+ 

@@ -17,7 +17,7 @@ namespace Vidly.DTOs
         public string Name { get; set; }
 
         //[Display(Name = "Date of Birth")] No need for Display attributes
-        [MembershipRequiresLegalAge]
+        //[MembershipRequiresLegalAge]
         public DateTime? Birthdate { get; set; }
 
         public bool IsSubscribedToNewsletter { get; set; }

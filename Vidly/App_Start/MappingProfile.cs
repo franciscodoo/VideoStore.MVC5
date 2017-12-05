@@ -10,11 +10,10 @@ namespace Vidly.App_Start
 {
     public class MappingProfile : Profile //Must inherit from Profile
     {
-        MapperConfiguration config = new MapperConfiguration(cfg =>
+        public MappingProfile()
         {
-            cfg.CreateMap<Customer, CustomerDTO>();
-            cfg.CreateMap<CustomerDTO, Customer>();
-            /*etc...*/
-        });
+            CreateMap<Customer, CustomerDTO>();
+            CreateMap<CustomerDTO, Customer>();
+        }
     }
 }
