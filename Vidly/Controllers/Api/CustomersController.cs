@@ -1,101 +1,96 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AutoMapper;
+using System;
+using System.Data.Entity;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using AutoMapper;
-using Vidly.DTOs;
+using Vidly.Dtos;
 using Vidly.Models;
 
 namespace Vidly.Controllers.Api
 {
-    
     public class CustomersController : ApiController
     {
-        #region ApplicationDbContext
         private ApplicationDbContext _context;
 
         public CustomersController()
         {
             _context = new ApplicationDbContext();
         }
-        #endregion
-
-        //In APIs we should not use domain objects (e.g. Customer) because it introduces security vulnerabilities
-        //and it reduces the chances of our API breaking if we change our domain model.
-        //We should use Data Transfer Objects (DTO) instead
 
         // GET /api/customers
-        public IEnumerable<CustomerDTO> GetCustomers()
+        public IHttpActionResult GetCustomers(string query = null)
         {
-            return _context.Customers.ToList().Select(Mapper.Map<Customer, CustomerDTO>); //Map<...> without () in the end - because we want deferred exec
+            var customersQuery = _context.Customers
+                .Include(c => c.MembershipType);
+
+            if (!String.IsNullOrWhiteSpace(query))
+                customersQuery = customersQuery.Where(c => c.Name.Contains(query));
+
+            var customerDtos = customersQuery
+                .ToList()
+                .Select(Mapper.Map<Customer, CustomerDto>);
+            
+            return Ok(customerDtos);    
         }
 
         // GET /api/customers/1
         public IHttpActionResult GetCustomer(int id)
         {
-            var customer = _context.Customers.SingleOrDefault(x => x.Id == id);
+            var customer = _context.Customers.SingleOrDefault(c => c.Id == id);
 
             if (customer == null)
                 return NotFound();
 
-            return Ok(Mapper.Map<Customer, CustomerDTO>(customer));
-            //return customer;
+            return Ok(Mapper.Map<Customer, CustomerDto>(customer));
         }
 
         // POST /api/customers
-        [HttpPost] //only responds to POST requests
-        //IHttpActionResult similar to actionResult in MVC. 
-        public IHttpActionResult CreateCustomer(CustomerDTO customerDTO)
+        [HttpPost]
+        public IHttpActionResult CreateCustomer(CustomerDto customerDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var customer = Mapper.Map<CustomerDTO, Customer>(customerDTO);
-
+            var customer = Mapper.Map<CustomerDto, Customer>(customerDto);
             _context.Customers.Add(customer);
             _context.SaveChanges();
 
-            customerDTO.Id = customer.Id;
-
-            return Created(new Uri(Request.RequestUri + "/" + customer.Id), customerDTO);
+            customerDto.Id = customer.Id;
+            return Created(new Uri(Request.RequestUri + "/" + customer.Id), customerDto);
         }
 
         // PUT /api/customers/1
-        [HttpPut] //only responds to PUT requests
-        public void UpdateCustomer(int id, CustomerDTO customerDTO)
+        [HttpPut]
+        public IHttpActionResult UpdateCustomer(int id, CustomerDto customerDto)
         {
             if (!ModelState.IsValid)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                return BadRequest();
 
-            var customerInDb = _context.Customers.SingleOrDefault(x => x.Id == id);
+            var customerInDb = _context.Customers.SingleOrDefault(c => c.Id == id);
 
             if (customerInDb == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
 
-            //existing obj passed as 2nd arg to track changes to it
-            Mapper.Map<CustomerDTO, Customer>(customerDTO, customerInDb);
-
-            //customerInDb.Name = customerDTO.Name;
-            //customerInDb.Birthdate = customerDTO.Birthdate;
-            //customerInDb.IsSubscribedToNewsletter = customerDTO.IsSubscribedToNewsletter;
-            //customerInDb.MembershipTypeId = customerDTO.MembershipTypeId;
+            Mapper.Map(customerDto, customerInDb);
 
             _context.SaveChanges();
+
+            return Ok();
         }
 
-        //DELETE api/customers/1
+        // DELETE /api/customers/1
         [HttpDelete]
-        public void DeleteCustomer(int id)
+        public IHttpActionResult DeleteCustomer(int id)
         {
-            var customerInDb = _context.Customers.SingleOrDefault(x => x.Id == id);
+            var customerInDb = _context.Customers.SingleOrDefault(c => c.Id == id);
 
             if (customerInDb == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
 
             _context.Customers.Remove(customerInDb);
             _context.SaveChanges();
+
+            return Ok();
         }
     }
 }

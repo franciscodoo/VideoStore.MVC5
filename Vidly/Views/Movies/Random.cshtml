@@ -4,19 +4,21 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@*
+    This is a comment
+    On multiple lines    
+*@
+
+
 @{
-    var className = Model.Customers.Count > 1 ? "popular" : null;
+    var className = Model.Customers.Count > 0 ? "popular" : null;
 }
 
-<h2>A Wild Movie Appears!</h2>
-
-<p class = "@className"> @*Dynamically define the css class. If className is null, nothing is written*@
-    @Model.Movie.Name
-</p>
+<h2 class="@className">@Model.Movie.Name</h2>
 
 @if (Model.Customers.Count == 0)
 {
-    <text> No one has rented this movie. </text>
+    <text>No one has rented this movie before.</text>
 }
 else
 {
@@ -27,3 +29,4 @@ else
         }
     </ul>
 }
+

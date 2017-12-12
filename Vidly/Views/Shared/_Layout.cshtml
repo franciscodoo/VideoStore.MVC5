@@ -3,23 +3,22 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Vidly</title>
+    <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
 <body>
-    @Html.Partial("_NavigationBar") @*model can be sent as second argument*@
+    @Html.Partial("_NavBar")
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Cyka Blyat</p>
+            <p>&copy; @DateTime.Now.Year - Vidly</p>
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/lib")
     @RenderSection("scripts", required: false)
 </body>
 </html>

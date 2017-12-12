@@ -1,5 +1,4 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
 namespace Vidly
 {
@@ -8,10 +7,18 @@ namespace Vidly
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+            bundles.Add(new ScriptBundle("~/bundles/lib").Include(
+                        "~/Scripts/jquery-{version}.js",
+                        "~/Scripts/bootstrap.js",
+                        "~/scripts/bootbox.js",
+                        "~/Scripts/respond.js",
+                        "~/scripts/datatables/jquery.datatables.js",
+                        "~/scripts/datatables/datatables.bootstrap.js",
+                        "~/scripts/typeahead.bundle.js",
+                        "~/scripts/toastr.js"
+                      ));
 
-            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include( //client-side validation
+            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
@@ -19,13 +26,12 @@ namespace Vidly
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
-                      "~/Scripts/bootbox.js",
-                      "~/Scripts/respond.js"));
-
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap-darkly.css",
+                      "~/Content/bootstrap-lumen.css",
+                      "~/Content/bootstrap-theme.css",
+                      "~/content/datatables/css/datatables.bootstrap.css",
+                      "~/content/typeahead.css",
+                      "~/content/toastr.css",
                       "~/Content/site.css"));
         }
     }

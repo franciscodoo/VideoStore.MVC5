@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Vidly")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("d39c2785-1228-4193-adb3-3aa65e7ccee8")]
+[assembly: Guid("0cbbf580-7036-41d3-9833-1c56d1bfb9dd")]
 
 // Version information for an assembly consists of the following four values:
 //
